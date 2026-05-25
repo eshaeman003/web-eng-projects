@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 4: React Component Simulation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lavender: #B8B8D1;
+            --lavender-light: #D0D0E3;
+            --lavender-pale: #E8E8F2;
+            --lavender-soft: #F2F2F8;
+            --porpoise: #4D4F5F;
+            --porpoise-light: #6B6D80;
+            --porpoise-pale: #8A8C9E;
+            --porpoise-dark: #353747;
+            --white: #FFFFFF;
+            --cream: #FAFAFC;
+            --text-dark: #2E3042;
+            --text-medium: #5A5C70;
+            --text-light: #8A8CA0;
+            --border: #E0E0EC;
+            --shadow-soft: 0 6px 30px rgba(77, 79, 95, 0.08);
+            --shadow-hover: 0 12px 40px rgba(77, 79, 95, 0.14);
+            --radius-sm: 14px;
+            --radius-md: 20px;
+            --radius-lg: 28px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(165deg, var(--lavender-soft) 0%, var(--cream) 40%, var(--lavender-pale) 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.7s ease;
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--porpoise) 0%, var(--porpoise-light) 100%);
+            color: var(--lavender-soft);
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .header h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: var(--porpoise);
+            margin-bottom: 10px;
+            letter-spacing: -1.5px;
+        }
+
+        .header p {
+            font-size: 1.05rem;
+            color: var(--text-medium);
+            font-weight: 400;
+        }
+
+        .header-tags {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .htag {
+            padding: 7px 18px;
+            border-radius: 50px;
+            font-size: 0.74rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border: 1.5px solid;
+        }
+
+        .htag-porpoise {
+            background: var(--porpoise);
+            color: var(--lavender-soft);
+            border-color: var(--porpoise);
+        }
+
+        .htag-lavender {
+            background: var(--lavender);
+            color: var(--porpoise-dark);
+            border-color: var(--lavender);
+        }
+
+        /* ===== CODE EXPLANATION CARD ===== */
+        .code-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 24px;
+            animation: fadeInUp 0.7s ease 0.1s both;
+            border: 1.5px solid var(--border);
+        }
+
+        .code-card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--porpoise);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .code-card-title .icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--lavender) 0%, var(--lavender-light) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .code-block {
+            background: var(--porpoise-dark);
+            border-radius: var(--radius-md);
+            padding: 24px 28px;
+            overflow-x: auto;
+            border: 1.5px solid var(--porpoise);
+        }
+
+        .code-block pre {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.9;
+            color: var(--lavender-soft);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .code-block .kw { color: #C5B8E0; font-weight: 600; }
+        .code-block .fn { color: #A8D5BA; }
+        .code-block .str { color: #E8C8A0; }
+        .code-block .num { color: #A0C8E8; }
+        .code-block .tag { color: #D4A0A0; }
+        .code-block .prop { color: #B8D4E8; }
+        .code-block .cm { color: var(--porpoise-pale); }
+
+        /* ===== STUDENT CARDS GRID ===== */
+        .cards-section {
+            margin-bottom: 24px;
+            animation: fadeInUp 0.7s ease 0.2s both;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--porpoise);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--porpoise) 0%, var(--porpoise-light) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--lavender-soft);
+        }
+
+        .student-count {
+            background: var(--lavender);
+            color: var(--porpoise-dark);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .student-card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1.5px solid var(--border);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .student-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--lavender) 0%, var(--porpoise) 100%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .student-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--lavender);
+        }
+
+        .student-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            padding: 24px 24px 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--lavender) 0%, var(--porpoise-pale) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            border: 2.5px solid var(--white);
+            box-shadow: 0 2px 8px rgba(77, 79, 95, 0.12);
+        }
+
+        .avatar-info h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--porpoise);
+            margin-bottom: 2px;
+        }
+
+        .avatar-info .role {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .card-body {
+            padding: 0 24px 20px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--lavender-pale);
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--porpoise);
+        }
+
+        .marks-bar {
+            margin-top: 16px;
+            height: 6px;
+            background: var(--lavender-pale);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .marks-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--lavender) 0%, var(--porpoise-light) 100%);
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .marks-text {
+            text-align: right;
+            font-size: 0.75rem;
+            color: var(--porpoise-light);
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        /* ===== HOW IT WORKS ===== */
+        .explain-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 24px;
+            animation: fadeInUp 0.7s ease 0.3s both;
+            border: 1.5px solid var(--border);
+        }
+
+        .explain-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--porpoise);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .explain-title .icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--lavender) 0%, var(--lavender-light) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 16px 20px;
+            background: var(--lavender-soft);
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--lavender-pale);
+            transition: all 0.3s ease;
+        }
+
+        .step-item:hover {
+            border-color: var(--lavender);
+            transform: translateX(4px);
+        }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--porpoise) 0%, var(--porpoise-light) 100%);
+            color: var(--lavender-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--porpoise);
+            margin-bottom: 4px;
+        }
+
+        .step-content p {
+            font-size: 0.85rem;
+            color: var(--text-medium);
+            line-height: 1.5;
+        }
+
+        .step-content code {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.78rem;
+            background: var(--lavender-pale);
+            color: var(--porpoise);
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+
+        /* ===== REACT MAPPING ===== */
+        .mapping-card {
+            background: linear-gradient(135deg, var(--porpoise) 0%, var(--porpoise-dark) 100%);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            color: var(--lavender-soft);
+            box-shadow: var(--shadow-soft);
+            animation: fadeInUp 0.7s ease 0.4s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mapping-card::after {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(184, 184, 209, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .mapping-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mapping-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+        }
+
+        .mapping-item {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-sm);
+            padding: 18px;
+            border: 1px solid rgba(184, 184, 209, 0.15);
+        }
+
+        .mapping-item h5 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--lavender);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .mapping-item p {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            line-height: 1.5;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.9rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .section-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+            .mapping-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-badge">⚛️ Practice Task 4</div>
+            <h1>React Component Simulation</h1>
+            <p>Simulate React props, destructuring & map() with plain JavaScript</p>
+            <div class="header-tags">
+                <span class="htag htag-porpoise">Arrow Functions</span>
+                <span class="htag htag-lavender">Destructuring</span>
+                <span class="htag htag-porpoise">Array.map()</span>
+                <span class="htag htag-lavender">Template Literals</span>
+            </div>
+        </div>
+
+        <!-- Code Card -->
+        <div class="code-card">
+            <div class="code-card-title">
+                <div class="icon">💻</div>
+                StudentCard Component (Plain JS Simulation)
+            </div>
+            <div class="code-block">
+                <pre><span class="cm">// Arrow function with destructuring in parameter</span>
+<span class="kw">const</span> <span class="fn">StudentCard</span> = ({ name, marks, course }) => <span class="str">`
+  &lt;div class='card'&gt;
+    &lt;h3&gt;${name}&lt;/h3&gt;
+    &lt;p&gt;Course: ${course}&lt;/p&gt;
+    &lt;p&gt;Marks: ${marks}&lt;/p&gt;
+  &lt;/div&gt;
+`</span>;
+
+<span class="cm">// map() to render list — same pattern as React JSX</span>
+<span class="kw">const</span> html = students.<span class="fn">map</span>(s => <span class="fn">StudentCard</span>(s)).<span class="fn">join</span>(<span class="str">''</span>);
+document.<span class="fn">getElementById</span>(<span class="str">'output'</span>).innerHTML = html;</pre>
+            </div>
+        </div>
+
+        <!-- Student Cards Section -->
+        <div class="cards-section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="icon">🎓</div>
+                    Rendered Student Cards
+                </div>
+                <div class="student-count" id="studentCount">4 Students</div>
+            </div>
+            <div class="cards-grid" id="cardsOutput"></div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="explain-card">
+            <div class="explain-title">
+                <div class="icon">🔧</div>
+                How It Works (Step by Step)
+            </div>
+            <div class="steps-list">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h4>Define the Component Function</h4>
+                        <p><code>StudentCard</code> is an arrow function that takes <code>props</code> object and destructures <code>{ name, marks, course }</code> directly in the parameter.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h4>Create Student Data Array</h4>
+                        <p>An array of 4+ student objects acts as mock data — same structure as API response or state in React.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h4>Map Over Array</h4>
+                        <p><code>students.map(s => StudentCard(s))</code> calls the component for each student, returning HTML strings — identical to React's JSX rendering pattern.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <h4>Join & Inject</h4>
+                        <p><code>.join('')</code> combines all HTML strings, then <code>innerHTML</code> injects them into the DOM — React uses <code>ReactDOM.render()</code> instead.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- React Mapping -->
+        <div class="mapping-card">
+            <div class="mapping-title">
+                <span>🔄</span> Plain JS → React Mapping
+            </div>
+            <div class="mapping-grid">
+                <div class="mapping-item">
+                    <h5>Component</h5>
+                    <p>Plain function returning HTML string → React function returning JSX</p>
+                </div>
+                <div class="mapping-item">
+                    <h5>Props</h5>
+                    <p>Single object parameter → Same props object in React</p>
+                </div>
+                <div class="mapping-item">
+                    <h5>Destructuring</h5>
+                    <p><code>{ name, marks }</code> in params → Identical in React</p>
+                </div>
+                <div class="mapping-item">
+                    <h5>List Render</h5>
+                    <p><code>.map() + .join()</code> → <code>.map() + key prop</code> in JSX</p>
+                </div>
+                <div class="mapping-item">
+                    <h5>Template</h5>
+                    <p>Template literal <code>`&lt;div&gt;`</code> → JSX syntax <code>&lt;div&gt;</code></p>
+                </div>
+                <div class="mapping-item">
+                    <h5>DOM Injection</h5>
+                    <p><code>innerHTML = html</code> → <code>ReactDOM.createRoot()</code></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== STUDENT DATA =====
+        const students = [
+            { name: 'Ali', marks: 85, course: 'Web Engineering', id: 1 },
+            { name: 'Sara', marks: 90, course: 'Web Engineering', id: 2 },
+            { name: 'Ahmed', marks: 72, course: 'Web Engineering', id: 3 },
+            { name: 'Zara', marks: 88, course: 'Web Engineering', id: 4 },
+            { name: 'Omar', marks: 95, course: 'Web Engineering', id: 5 }
+        ];
+
+        // ===== STUDENT CARD COMPONENT =====
+        // Arrow function with destructuring in parameter (simulating React props)
+        const StudentCard = ({ name, marks, course, id }) => {
+            const percentage = (marks / 100) * 100;
+            const grade = marks >= 90 ? 'A+' : marks >= 80 ? 'A' : marks >= 70 ? 'B' : 'C';
+            const emojis = ['👨‍🎓', '👩‍🎓', '👨‍💻', '👩‍💻', '🧑‍🔬'];
+            const emoji = emojis[(id - 1) % emojis.length];
+
+            return `
+                <div class="student-card" style="animation: fadeInUp 0.5s ease ${id * 0.1}s both;">
+                    <div class="card-header">
+                        <div class="avatar">${emoji}</div>
+                        <div class="avatar-info">
+                            <h3>${name}</h3>
+                            <div class="role">Student #${id} • Grade ${grade}</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-row">
+                            <span class="stat-label">Course</span>
+                            <span class="stat-value">${course}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Marks</span>
+                            <span class="stat-value">${marks} / 100</span>
+                        </div>
+                        <div class="marks-bar">
+                            <div class="marks-fill" style="width: ${percentage}%;"></div>
+                        </div>
+                        <div class="marks-text">${percentage}% completed</div>
+                    </div>
+                </div>
+            `;
+        };
+
+        // ===== RENDER ALL CARDS =====
+        function renderStudentCards() {
+            // map() calls StudentCard for each student → returns array of HTML strings
+            const cardsHTML = students
+                .map(student => StudentCard(student))
+                .join('');
+
+            document.getElementById('cardsOutput').innerHTML = cardsHTML;
+            document.getElementById('studentCount').textContent = `${students.length} Students`;
+        }
+
+        // Run on load
+        window.onload = renderStudentCards;
+    </script>
+</body>
+</html>

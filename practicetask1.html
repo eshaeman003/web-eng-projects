@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 1: String & Array Manipulation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --matcha: #8FA876;
+            --matcha-dark: #6B8E5A;
+            --matcha-light: #C5D9B5;
+            --matcha-pale: #E8F0E0;
+            --pink: #F4A6C3;
+            --pink-soft: #FAD4E4;
+            --pink-pale: #FFF0F5;
+            --pink-deep: #E08BA8;
+            --cream: #FDFBF7;
+            --text-dark: #3D3D3D;
+            --text-medium: #6B6B6B;
+            --text-light: #9B9B9B;
+            --shadow-soft: 0 8px 32px rgba(143, 168, 118, 0.12);
+            --shadow-hover: 0 12px 40px rgba(143, 168, 118, 0.18);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--pink-pale) 0%, var(--matcha-pale) 50%, var(--cream) 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: var(--text-dark);
+        }
+
+        .main-container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .header-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--pink) 0%, var(--matcha) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: var(--shadow-soft);
+            font-size: 28px;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: var(--text-medium);
+            font-weight: 300;
+        }
+
+        .header-tag {
+            display: inline-flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .tag {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .tag-pink {
+            background: var(--pink-soft);
+            color: var(--pink-deep);
+        }
+
+        .tag-matcha {
+            background: var(--matcha-pale);
+            color: var(--matcha-dark);
+        }
+
+        /* Input Card */
+        .input-card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 24px;
+            animation: fadeInUp 0.8s ease 0.1s both;
+            border: 1px solid rgba(143, 168, 118, 0.1);
+        }
+
+        .input-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--matcha-dark);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .sentence-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 16px 20px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            border: 2px solid var(--matcha-pale);
+            border-radius: 16px;
+            background: var(--cream);
+            color: var(--text-dark);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .sentence-input:focus {
+            border-color: var(--matcha);
+            box-shadow: 0 0 0 4px rgba(143, 168, 118, 0.15);
+            background: white;
+        }
+
+        .sentence-input::placeholder {
+            color: var(--text-light);
+        }
+
+        .process-btn {
+            padding: 16px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            color: white;
+            background: linear-gradient(135deg, var(--matcha) 0%, var(--matcha-dark) 100%);
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 16px rgba(143, 168, 118, 0.3);
+        }
+
+        .process-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .process-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Results */
+        .results-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .step-card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(143, 168, 118, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            border-radius: 20px 0 0 20px;
+        }
+
+        .step-card:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .step-card:nth-child(odd)::before { background: linear-gradient(180deg, var(--pink) 0%, var(--pink-deep) 100%); }
+        .step-card:nth-child(even)::before { background: linear-gradient(180deg, var(--matcha) 0%, var(--matcha-dark) 100%); }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .step-card:nth-child(odd) .step-number { background: linear-gradient(135deg, var(--pink) 0%, var(--pink-deep) 100%); }
+        .step-card:nth-child(even) .step-number { background: linear-gradient(135deg, var(--matcha) 0%, var(--matcha-dark) 100%); }
+
+        .step-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .step-method {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            font-weight: 400;
+            margin-top: 2px;
+        }
+
+        .step-result {
+            background: linear-gradient(135deg, var(--cream) 0%, var(--pink-pale) 100%);
+            border-radius: 14px;
+            padding: 16px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            word-wrap: break-word;
+            line-height: 1.6;
+            border: 1px solid rgba(244, 166, 195, 0.2);
+        }
+
+        .step-card:nth-child(even) .step-result {
+            background: linear-gradient(135deg, var(--cream) 0%, var(--matcha-pale) 100%);
+            border-color: rgba(143, 168, 118, 0.2);
+        }
+
+        /* Summary Card */
+        .summary-card {
+            background: linear-gradient(135deg, var(--matcha) 0%, var(--matcha-dark) 100%);
+            border-radius: 24px;
+            padding: 32px;
+            color: white;
+            box-shadow: var(--shadow-soft);
+            margin-top: 8px;
+            animation: fadeInUp 0.8s ease 0.3s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(244, 166, 195, 0.3) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .summary-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .summary-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 18px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .summary-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .original-text {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            font-style: italic;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8rem; }
+            .input-card { padding: 24px; }
+            .step-card { padding: 20px; }
+            .summary-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-icon">✨</div>
+            <h1>String & Array Manipulation</h1>
+            <p>Practice Task 1 — Web Engineering Lab</p>
+            <div class="header-tag">
+                <span class="tag tag-pink">JavaScript</span>
+                <span class="tag tag-matcha">ES6+</span>
+            </div>
+        </div>
+
+        <!-- Input Section -->
+        <div class="input-card">
+            <div class="input-label">
+                <span>📝</span> Enter Your Sentence
+            </div>
+            <div class="input-wrapper">
+                <input type="text" 
+                       class="sentence-input" 
+                       id="sentenceInput"
+                       placeholder="Type a sentence to process..."
+                       value="JavaScript is a powerful programming language">
+                <button class="process-btn" onclick="processSentence()">
+                    <span>▶</span> Process
+                </button>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function processSentence() {
+            const sentence = document.getElementById('sentenceInput').value.trim();
+            
+            if (!sentence) {
+                document.getElementById('output').innerHTML = `
+                    <div class="step-card" style="border-left: 4px solid var(--pink);">
+                        <div class="step-result" style="color: var(--pink-deep); font-weight: 600;">
+                            ⚠️ Please enter a sentence to process!
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Step 1: Uppercase
+            const upperCaseSentence = sentence.toUpperCase();
+            
+            // Step 2: Split
+            const wordsArray = sentence.split(' ');
+            
+            // Step 3: Filter
+            const filteredWords = wordsArray.filter(word => word.length >= 4);
+            
+            // Step 4: Map with template literal
+            const mappedWords = filteredWords.map(word => `${word} (${word.length} chars)`);
+            
+            // Step 5: Join
+            const finalString = mappedWords.join(' | ');
+
+            const steps = [
+                {
+                    num: '1',
+                    title: 'Uppercase Conversion',
+                    method: 'sentence.toUpperCase()',
+                    result: upperCaseSentence
+                },
+                {
+                    num: '2',
+                    title: 'Split into Words Array',
+                    method: 'sentence.split(" ")',
+                    result: JSON.stringify(wordsArray)
+                },
+                {
+                    num: '3',
+                    title: 'Filter Words (≥ 4 chars)',
+                    method: 'words.filter(w => w.length >= 4)',
+                    result: JSON.stringify(filteredWords)
+                },
+                {
+                    num: '4',
+                    title: 'Map with Template Literals',
+                    method: 'words.map(w => `${w} (${w.length} chars)`)',
+                    result: JSON.stringify(mappedWords)
+                },
+                {
+                    num: '5',
+                    title: 'Join into Final String',
+                    method: 'words.join(" | ")',
+                    result: finalString
+                }
+            ];
+
+            let stepsHTML = '<div class="results-container">';
+            steps.forEach(step => {
+                stepsHTML += `
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">${step.num}</div>
+                            <div>
+                                <div class="step-title">${step.title}</div>
+                                <div class="step-method">${step.method}</div>
+                            </div>
+                        </div>
+                        <div class="step-result">${step.result}</div>
+                    </div>
+                `;
+            });
+            stepsHTML += '</div>';
+
+            // Summary
+            stepsHTML += `
+                <div class="summary-card">
+                    <div class="summary-title">
+                        <span>📊</span> Processing Summary
+                    </div>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <div class="summary-value">${wordsArray.length}</div>
+                            <div class="summary-label">Total Words</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">${filteredWords.length}</div>
+                            <div class="summary-label">Filtered (≥4 chars)</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">${mappedWords.length}</div>
+                            <div class="summary-label">Final Output</div>
+                        </div>
+                    </div>
+                    <div class="original-text">
+                        📝 Original: "${sentence}"
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('output').innerHTML = stepsHTML;
+        }
+
+        // Run on load
+        window.onload = processSentence;
+
+        // Enter key support
+        document.getElementById('sentenceInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') processSentence();
+        });
+    </script>
+</body>
+</html>
