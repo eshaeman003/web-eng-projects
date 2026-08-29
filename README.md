@@ -1,4 +1,4 @@
-# 🌐 Web Engineering Projects
+#  Web Engineering Projects
 
 > A collection of small frontend projects, practical tasks, and exercises developed throughout my Web Engineering coursework to strengthen my understanding of HTML, CSS, JavaScript, and fundamental web development concepts.
 
@@ -14,7 +14,7 @@
 
 ---
 
-## 📌 About This Repository
+##  About This Repository
 
 **Web Engineering Projects** is a collection of small frontend exercises and practical tasks completed throughout my Web Engineering coursework.
 
@@ -31,7 +31,7 @@ These projects serve as a record of my hands-on learning and experimentation wit
 
 ---
 
-## 🎯 Learning Objectives
+##  Learning Objectives
 
 The main purpose of this repository is to strengthen practical knowledge of:
 
@@ -48,7 +48,7 @@ The main purpose of this repository is to strengthen practical knowledge of:
 
 ---
 
-# 📂 Projects & Practice Tasks
+#  Projects & Practice Tasks
 
 ## 01 — Practice Task 1
 
@@ -116,7 +116,7 @@ It represents another stage of hands-on practice during the Web Engineering cour
 
 ---
 
-# 🧩 Repository Structure
+#  Repository Structure
 
 ```text
 web-eng-projects/
